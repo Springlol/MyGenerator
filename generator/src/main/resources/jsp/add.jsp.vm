@@ -1,0 +1,54 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+      $.extend($.fn.validatebox.defaults.rules, {//表单验证
+              idcard : {// 验证身份证
+                        validator : function(value) {
+                            return /^\d{15}(\d{2}[A-Za-z0-9])?$/i.test(value);
+                        },
+                        message : '身份证号码格式不正确'
+                    },
+              telNum:{ //既验证手机号，又验证座机号
+                        validator: function(value, param){
+                            return /(^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$)|(^((\d3)|(\d{3}\-))?(1[3578]\d{9})$)/.test(value);
+                           },
+                           message: '请输入正确的电话号码。'
+                      }
+        });
+
+      $(function() {
+      });
+
+
+      function submit(){
+        var inputForm = $('#inputForm');
+        inputForm.form('enableValidation')
+        if(inputForm.form('validate')){
+            inputForm.form('submit', {
+            url:...,
+            onSubmit: function(params){
+            },
+            success:function(data){
+            }
+        }
+      }
+    </script>
+</head>
+<body>
+    <div style="padding: 5px; padding-top: 15px; padding-left: 40px;">
+        <form id="inputForm" method="post"  enctype="multipart/form-data">
+            #foreach($field in ${table.fields})
+            <div style="padding: 5px;">
+                <label style="padding-right: 10px;">$field.comment</label>
+                <input name="${field.propertyName}" class="easyui-validatebox textfield_2" style="border-radius:2px;" data-options="required:true" maxlength="32"/>
+            </div>
+            #end
+            <input type="button" onclick="submit()">提交</input>
+            <input type="button" onclick="cancel()">取消</input>
+        </form>
+    </div>
+</body>
+</html>

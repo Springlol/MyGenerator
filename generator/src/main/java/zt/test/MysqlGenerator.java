@@ -32,21 +32,21 @@ public class MysqlGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir("/Users/zhoutao/java/code/");
+        gc.setOutputDir("E:/develop");
         gc.setFileOverride(true);
         gc.setActiveRecord(false);// 开启 activeRecord 模式
         gc.setEnableCache(false);// XML 二级缓存
         gc.setBaseResultMap(false);// XML ResultMap
         gc.setBaseColumnList(false);// XML columList
-        gc.setAuthor("Zt");
+        gc.setAuthor("zhoutao");
 
         // 自定义文件命名，注意 %s 会自动填充表实体属性！
         // gc.setMapperName("%sDao");
         // gc.setXmlName("%sDao");
         // gc.setServiceName("MP%sService");
-        // gc.setServiceImplName("%sServiceDiy");
-        // gc.setControllerName("%sAction");
-        mpg.setGlobalConfig(gc);
+         gc.setServiceImplName("%sService");
+         gc.setControllerName("%sAction");
+         mpg.setGlobalConfig(gc);
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
@@ -71,7 +71,7 @@ public class MysqlGenerator {
         // strategy.setDbColumnUnderline(true);//全局下划线命名
         //strategy.setTablePrefix(new String[] { "bmd_", "mp_" });// 此处可以修改为您的表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-        strategy.setInclude(new String[]{"user"}); // 需要生成的表
+        //strategy.setInclude(new String[]{"user"}); // 需要生成的表
         // strategy.setExclude(new String[]{"test"}); // 排除生成的表
         // 自定义实体父类
         // strategy.setSuperEntityClass("zt.generator.TestEntity");
@@ -82,9 +82,9 @@ public class MysqlGenerator {
         // 自定义 service 父类
         // strategy.setSuperServiceClass("zt.generator.TestService");
         // 自定义 service 实现类父类
-        // strategy.setSuperServiceImplClass("zt.generator.TestServiceImpl");
+         strategy.setSuperServiceImplClass("zt.generator.BaseService");
         // 自定义 controller 父类
-        // strategy.setSuperControllerClass("zt.generator.TestController");
+         strategy.setSuperControllerClass("zt.generator.BaseAction");
         // 【实体】是否生成字段常量（默认 false）
         // public static final String ID = "test_id";
         // strategy.setEntityColumnConstant(true);
@@ -110,13 +110,21 @@ public class MysqlGenerator {
             }
         };
         List<FileOutConfig> focList = new ArrayList<FileOutConfig>();
-        focList.add(new FileOutConfig("/templates/entity.java.vm") {
+        focList.add(new FileOutConfig("/jsp/datagrid.jsp.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
-                return "/Users/zhoutao/java/code/my_" + tableInfo.getEntityName() + ".java";
+                return "E:/develop/"+tableInfo.getEntityName()+"_main.jsp";
             }
         });
+        focList.add(new FileOutConfig("/jsp/add.jsp.vm") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输入文件名称
+                return "E:/develop/"+tableInfo.getEntityName()+"_add.jsp";
+            }
+        });
+
         cfg.setFileOutConfigList(focList);
         mpg.setCfg(cfg);
 

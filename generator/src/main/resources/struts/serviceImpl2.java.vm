@@ -1,0 +1,28 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${superServiceImplClassPackage};
+import org.springframework.stereotype.Service;
+import java.util.*;
+/**
+ * <p>
+ * ${table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${entity}> {
+
+        public List<${entity}> listJson(int rows,int page){
+            Map<String,Object> params = new HashMap<String, Object>();
+            String hql = DaoUtil.getFindPrefix(${entity}.class) + " WHERE 1=1 ";
+            StringBuilder condition = new StringBuilder();
+
+            //..........
+
+            return baseDao.find(hql+condition,params,page,rows);
+        }
+
+}

@@ -37,7 +37,7 @@ public class AutoGenerator extends AbstractGenerator {
         // 初始化配置
         initConfig();
         // 创建输出文件路径
-        //mkdirs(config.getPathInfo());
+        mkdirs(config.getPathInfo());
         // 获取上下文
         Map<String, VelocityContext> ctxData = analyzeData(config);
         // 循环生成文件
@@ -96,11 +96,11 @@ public class AutoGenerator extends AbstractGenerator {
             /* ---------- 添加导入包 ---------- */
             if (config.getGlobalConfig().isActiveRecord()) {
                 // 开启 ActiveRecord 模式
-                tableInfo.setImportPackages("com.baomidou.mybatisplus.activerecord.Model");
+                tableInfo.setImportPackages("zt.generator.*");
             }
             if (tableInfo.isConvert()) {
                 // 表注解
-                tableInfo.setImportPackages("com.baomidou.mybatisplus.annotations.TableName");
+                tableInfo.setImportPackages("");
             }
             if (StringUtils.isNotEmpty(config.getSuperEntityClass())) {
                 // 父实体
@@ -184,7 +184,7 @@ public class AutoGenerator extends AbstractGenerator {
 
             // 根据override标识来判断是否需要创建文件
             if (isCreate(entityFile)) {
-                //vmToFile(context, template.getEntity(), entityFile);
+                vmToFile(context, template.getEntity(), entityFile);
             }
             if (isCreate(mapperFile)) {
                 //vmToFile(context, template.getMapper(), mapperFile);
@@ -193,13 +193,13 @@ public class AutoGenerator extends AbstractGenerator {
                 //vmToFile(context, template.getXml(), xmlFile);
             }
             if (isCreate(serviceFile)) {
-                //vmToFile(context, template.getService(), serviceFile);
+//                vmToFile(context, template.getService(), serviceFile);
             }
             if (isCreate(implFile)) {
-                //vmToFile(context, template.getServiceImpl(), implFile);
+                vmToFile(context, template.getServiceImpl(), implFile);
             }
             if (isCreate(controllerFile)) {
-                //vmToFile(context, template.getController(), controllerFile);
+                vmToFile(context, template.getController(), controllerFile);
             }
             if (injectionConfig != null) {
                 /**

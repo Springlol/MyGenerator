@@ -1,0 +1,64 @@
+package ${package.Controller};
+
+import javax.annotation.Resource;
+import com.opensymphony.xwork2.ModelDriven;
+import org.apache.log4j.Logger;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+/**
+ * <p>
+ * ${table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Namespace("/${entity.substring(0,1).toLowerCase()}${entity.substring(1,${entity.length()})}")
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} implements ModelDriven<${entity}>{
+#else
+public class ${table.controllerName} {
+#end
+    private static final long serialVersionUID = 1L;
+
+    private static final Logger logger = Logger.getLogger(${table.controllerName}.class);
+    @Resource
+    private ${entity}Service ${entity.substring(0,1).toLowerCase()}${entity.substring(1,${entity.length()})}Service;
+
+    private ${entity} ${entity.substring(0,1).toLowerCase()}${entity.substring(1,${entity.length()})} = new ${entity}();
+    @Override
+    public ${entity} getModel() {
+        return this.${entity.substring(0,1).toLowerCase()}${entity.substring(1,${entity.length()})};
+    }
+
+    @Action("add")
+    public String add() {
+        return SUCCESS;
+    }
+    @Action("main")
+    public String main() {
+        return SUCCESS;
+    }
+    @Action("edit")
+    public String edit() {
+        ${entity} new${entity} = ${entity.substring(0,1).toLowerCase()}${entity.substring(1,${entity.length()})}Service.getByEntityId(${entity.substring(0,1).toLowerCase()}${entity.substring(1,${entity.length()})}.getId());
+        getRequest().setAttribute("${entity.substring(0,1).toLowerCase()}${entity.substring(1,${entity.length()})}", new${entity});
+        return SUCCESS;
+    }
+
+    @Action("listJson")
+    public void listJson(){
+        try {
+            List<${entity}> lists = ${entity.substring(0,1).toLowerCase()}${entity.substring(1,${entity.length()})}Service.listJson();
+            writeJson(lists);
+        }catch(Exception e){
+            logger.error("失败",e);
+        }
+    }
+
+}

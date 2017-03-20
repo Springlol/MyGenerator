@@ -1,0 +1,94 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<jsp:include page="/inc.jsp" />
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/imageViewer/ImageViewer.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/js/imageViewer/ImageViewer.css" type="text/css"></link>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/datagridUtils.js?v=2.2"></script>
+    <script type="text/javascript">
+    	var modelPath = contextPath + "/${entity.substring(0,1).toLowerCase()}${entity.substring(1,${entity.length()})}/";
+    	var crudgrid;
+		$(function(){
+			crudgrid = $('#crudgrid').datagrid({
+                url : modelPath + "listJson",
+                pagination : true,
+                border : false,
+                pageSize : 20,
+                nowrap : false,
+                toolbar : '#toolbar',
+                fit : true,
+                singleSelect : true,
+                onLoadSuccess : function(data) {
+                    $('.cellEmbedButton').linkbutton();
+                },
+                onClickRow : function(index,row){
+                    showDetail(row);
+                },
+        	});
+		});
+
+		function openDialog(url,inIframe){
+		     var dialog = easyuiUtils.openDialog({
+		        inIframe : inIframe,
+                width : 640,
+                height : 340,
+                modal : true,
+                title : '修改',
+                href : url,
+                buttons : [ {
+                    text : '取消',
+                    width:80,
+                    height:40,
+                    handler : function() {
+                        dialog.dialog('close');
+                    }
+                }, {
+                    text : '保存',
+                    width:80,
+                    height:40,
+                    handler : function() {
+
+                    }
+                } ]
+            });
+            return dialog;
+		}
+
+
+        /**
+         * 修改
+         */
+        function update(){
+            var row = $('#crudgrid').datagrid('getSelected');
+            if (!row){
+                alertMessage('请选择要编辑的!');
+                return;
+            }
+            var articleId = row.id;
+            var url = articlePath + 'edit?id=' +articleId;
+            openDialog(url,false);
+        }
+        function showDetail(row){
+            parent.changeRightPanel('....', modelPath+"/showDetail?id="+row.id);
+        }
+    </script>
+  </head>
+
+  <body>
+    <div id="toolbar" style="min-width: 600px;">
+        <input class="btn_red_2" type="button" id="button1"  onclick="addItem()" value="添加" />
+        <input class="btn_red_2" type="button" id="button2"  onclick="update();" value="修改" />
+        <input class="btn_red_2" type="button" id="button3"  onclick="delItem()" value="删除" />
+    </div>
+    <table id="crudgrid">
+        <thead>
+            <tr>
+                #foreach($field in ${table.fields})
+                <th data-options="field:'${field.propertyName}',#if(${field.keyFlag})hidden:true,#end align:'center'" width="200px">${field.comment}</th>
+                #end
+            </tr>
+        </thead>
+    </table>
+  </body>
+</html>
